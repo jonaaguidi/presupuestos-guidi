@@ -72,26 +72,26 @@ export default function PresupuestoForm({ existing }: Props) {
   };
 
   const inputClass =
-    "w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors";
-  const labelClass = "block text-xs font-semibold text-gray-600 mb-1";
+    "w-full rounded-lg border border-gray-200 bg-gray-50 px-3.5 py-2.5 text-sm text-gray-900 outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-400 focus:bg-white transition-all";
+  const labelClass = "block text-[11px] font-semibold text-gray-500 uppercase tracking-wide mb-1.5";
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gray-50">
       <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
         <div className="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="text-lg font-bold text-gray-900">
+          <h1 className="text-lg font-extrabold text-gray-900 tracking-tight">
             {existing ? "Editar presupuesto" : "Nuevo presupuesto"}
           </h1>
-          <Link href="/" className="text-sm text-gray-500 hover:text-gray-700">
+          <Link href="/" className="text-sm text-gray-400 hover:text-gray-600 font-medium transition-colors">
             Cancelar
           </Link>
         </div>
       </header>
 
-      <form onSubmit={handleSubmit} className="max-w-3xl mx-auto px-4 py-6 space-y-6">
+      <form onSubmit={handleSubmit} className="max-w-3xl mx-auto px-4 py-6 space-y-5">
         {/* Fechas */}
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
-          <h2 className="text-sm font-bold text-gray-900 mb-3">Fechas</h2>
+        <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+          <h2 className="text-xs font-bold text-gray-900 uppercase tracking-wide mb-4">Fechas</h2>
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className={labelClass}>Fecha</label>
@@ -105,23 +105,23 @@ export default function PresupuestoForm({ existing }: Props) {
         </div>
 
         {/* Cliente */}
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
-          <h2 className="text-sm font-bold text-gray-900 mb-3">Cliente</h2>
+        <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+          <h2 className="text-xs font-bold text-gray-900 uppercase tracking-wide mb-4">Cliente</h2>
           <div className="space-y-3">
             <div>
               <label className={labelClass}>Nombre</label>
-              <input type="text" value={clienteNombre} onChange={(e) => setClienteNombre(e.target.value)} className={inputClass} placeholder="Nombre del cliente" required />
+              <input type="text" value={clienteNombre} onChange={(e) => setClienteNombre(e.target.value)} className={inputClass} placeholder="Nombre completo del cliente" required />
             </div>
             <div>
               <label className={labelClass}>Dirección / CP</label>
-              <input type="text" value={clienteDireccion} onChange={(e) => setClienteDireccion(e.target.value)} className={inputClass} placeholder="Dirección completa" />
+              <input type="text" value={clienteDireccion} onChange={(e) => setClienteDireccion(e.target.value)} className={inputClass} placeholder="Calle, localidad, código postal" />
             </div>
           </div>
         </div>
 
         {/* Vehículo */}
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
-          <h2 className="text-sm font-bold text-gray-900 mb-3">Datos del vehículo</h2>
+        <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+          <h2 className="text-xs font-bold text-gray-900 uppercase tracking-wide mb-4">Datos del vehículo</h2>
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className={labelClass}>Marca</label>
@@ -143,38 +143,38 @@ export default function PresupuestoForm({ existing }: Props) {
         </div>
 
         {/* Detalle */}
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-sm font-bold text-gray-900">Detalle</h2>
+        <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xs font-bold text-gray-900 uppercase tracking-wide">Detalle</h2>
             <button
               type="button"
               onClick={addItem}
-              className="text-xs font-medium text-blue-600 hover:text-blue-800 px-2 py-1 rounded hover:bg-blue-50 transition-colors"
+              className="text-xs font-semibold text-gray-900 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-lg transition-colors"
             >
               + Agregar ítem
             </button>
           </div>
-          <div className="space-y-3">
+          <div className="space-y-4">
             {items.map((item, index) => (
-              <div key={index} className="flex gap-2 items-start">
+              <div key={index} className="flex gap-3 items-start p-3 rounded-lg bg-gray-50 border border-gray-100">
                 <div className="flex-1">
                   <label className={labelClass}>Descripción</label>
                   <textarea
                     value={item.descripcion}
                     onChange={(e) => updateItem(index, "descripcion", e.target.value)}
-                    className={`${inputClass} resize-none`}
+                    className={`${inputClass} resize-none !bg-white`}
                     rows={2}
                     placeholder="Descripción del trabajo o repuesto"
                     required
                   />
                 </div>
-                <div className="w-32 sm:w-40">
+                <div className="w-28 sm:w-36">
                   <label className={labelClass}>Valor ($)</label>
                   <input
                     type="number"
                     value={item.valor || ""}
                     onChange={(e) => updateItem(index, "valor", e.target.value)}
-                    className={inputClass}
+                    className={`${inputClass} !bg-white`}
                     placeholder="0"
                     min="0"
                     required
@@ -184,17 +184,22 @@ export default function PresupuestoForm({ existing }: Props) {
                   <button
                     type="button"
                     onClick={() => removeItem(index)}
-                    className="mt-6 text-red-400 hover:text-red-600 p-1"
+                    className="mt-7 w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors shrink-0"
                   >
-                    ✕
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="3 6 5 6 21 6" />
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                    </svg>
                   </button>
                 )}
               </div>
             ))}
           </div>
-          <div className="mt-4 pt-3 border-t border-gray-100 flex justify-between items-center">
-            <span className="text-sm font-bold text-gray-900">TOTAL</span>
-            <span className="text-lg font-bold text-gray-900">
+
+          {/* Total */}
+          <div className="mt-5 pt-4 border-t border-gray-200 flex justify-between items-center">
+            <span className="text-sm font-bold text-gray-500 uppercase tracking-wide">Total</span>
+            <span className="text-xl font-extrabold text-gray-900">
               ${total.toLocaleString("es-AR")}
             </span>
           </div>
@@ -203,7 +208,7 @@ export default function PresupuestoForm({ existing }: Props) {
         {/* Submit */}
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white font-medium py-3 rounded-xl hover:bg-blue-700 transition-colors text-sm"
+          className="w-full bg-gray-900 text-white font-semibold py-3.5 rounded-xl hover:bg-gray-800 active:scale-[0.99] transition-all text-sm shadow-sm"
         >
           {existing ? "Guardar cambios" : "Crear presupuesto"}
         </button>
