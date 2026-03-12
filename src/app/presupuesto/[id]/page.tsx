@@ -1,17 +1,16 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { Presupuesto } from "@/lib/types";
 import { getPresupuesto } from "@/lib/storage";
-import { padNumero } from "@/lib/utils";
+import { generatePDF } from "@/lib/pdf";
 import PresupuestoPDF from "@/components/PresupuestoPDF";
 
 export default function VerPresupuestoPage() {
   const params = useParams();
   const router = useRouter();
-  const pdfRef = useRef<HTMLDivElement>(null);
   const [presupuesto, setPresupuesto] = useState<Presupuesto | null>(null);
   const [downloading, setDownloading] = useState(false);
 
@@ -25,22 +24,11 @@ export default function VerPresupuestoPage() {
   }, [params.id, router]);
 
   const handleDownloadPDF = async () => {
-    if (!pdfRef.current || !presupuesto) return;
+    if (!presupuesto) return;
     setDownloading(true);
 
     try {
-      const mod = await import("html2pdf.js");
-      const html2pdf = mod.default || mod;
-      const filename = `Presupuesto-${padNumero(presupuesto.numero)}-${presupuesto.cliente.nombre.replace(/\s+/g, "-")}.pdf`;
-
-      const element = pdfRef.current;
-      await html2pdf(element, {
-        margin: [10, 10, 10, 10],
-        filename,
-        image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-      });
+      generatePDF(presupuesto);
     } catch (err) {
       console.error("Error generating PDF:", err);
       alert("Error al generar el PDF. Intente de nuevo.");
@@ -82,7 +70,7 @@ export default function VerPresupuestoPage() {
       </header>
 
       <main className="max-w-4xl mx-auto px-4 py-6">
-        <div ref={pdfRef} className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
           <PresupuestoPDF presupuesto={presupuesto} />
         </div>
       </main>

@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Presupuesto } from "@/lib/types";
 import { getPresupuestos, deletePresupuesto } from "@/lib/storage";
 import { formatCurrency, formatDate, padNumero } from "@/lib/utils";
 
 export default function Home() {
+  const router = useRouter();
   const [presupuestos, setPresupuestos] = useState<Presupuesto[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [search, setSearch] = useState("");
@@ -36,7 +38,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
         <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
           <div>
@@ -77,7 +78,6 @@ export default function Home() {
           </div>
         ) : (
           <>
-            {/* Search */}
             <div className="mb-4">
               <input
                 type="text"
@@ -88,18 +88,16 @@ export default function Home() {
               />
             </div>
 
-            {/* Count */}
             <p className="text-xs text-gray-400 mb-3 px-1">
               {filtered.length} {filtered.length === 1 ? "presupuesto" : "presupuestos"}
             </p>
 
-            {/* List */}
             <div className="space-y-2.5">
               {filtered.map((p) => (
-                <Link
+                <div
                   key={p.id}
-                  href={`/presupuesto/${p.id}`}
-                  className="block bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md hover:border-gray-300 transition-all active:scale-[0.99]"
+                  className="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md hover:border-gray-300 transition-all cursor-pointer"
+                  onClick={() => router.push(`/presupuesto/${p.id}`)}
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0 flex-1">
@@ -125,20 +123,22 @@ export default function Home() {
                     </div>
                   </div>
                   <div className="flex items-center gap-1 mt-3 pt-3 border-t border-gray-100">
-                    <span
+                    <button
+                      type="button"
                       className="text-xs font-medium text-gray-500 hover:text-gray-800 px-2.5 py-1 rounded-md hover:bg-gray-100 transition-colors"
-                      onClick={(e) => { e.preventDefault(); window.location.href = `/editar/${p.id}`; }}
+                      onClick={(e) => { e.stopPropagation(); router.push(`/editar/${p.id}`); }}
                     >
                       Editar
-                    </span>
-                    <span
-                      onClick={(e) => { e.preventDefault(); handleDelete(p.id); }}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={(e) => { e.stopPropagation(); handleDelete(p.id); }}
                       className="text-xs font-medium text-red-400 hover:text-red-600 px-2.5 py-1 rounded-md hover:bg-red-50 transition-colors ml-auto"
                     >
                       Eliminar
-                    </span>
+                    </button>
                   </div>
-                </Link>
+                </div>
               ))}
             </div>
           </>
