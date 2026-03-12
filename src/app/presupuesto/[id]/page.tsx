@@ -29,21 +29,21 @@ export default function VerPresupuestoPage() {
     setDownloading(true);
 
     try {
-      const html2pdf = (await import("html2pdf.js")).default;
+      const mod = await import("html2pdf.js");
+      const html2pdf = mod.default || mod;
       const filename = `Presupuesto-${padNumero(presupuesto.numero)}-${presupuesto.cliente.nombre.replace(/\s+/g, "-")}.pdf`;
 
-      await html2pdf()
-        .set({
-          margin: [10, 10, 10, 10],
-          filename,
-          image: { type: "jpeg", quality: 0.98 },
-          html2canvas: { scale: 2, useCORS: true },
-          jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-        })
-        .from(pdfRef.current)
-        .save();
+      const element = pdfRef.current;
+      await html2pdf(element, {
+        margin: [10, 10, 10, 10],
+        filename,
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+      });
     } catch (err) {
       console.error("Error generating PDF:", err);
+      alert("Error al generar el PDF. Intente de nuevo.");
     } finally {
       setDownloading(false);
     }
