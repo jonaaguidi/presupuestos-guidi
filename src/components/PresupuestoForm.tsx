@@ -88,7 +88,7 @@ export default function PresupuestoForm({ existing }: Props) {
         </div>
       </header>
 
-      <form onSubmit={handleSubmit} className="max-w-3xl mx-auto px-4 py-6 space-y-5">
+      <form onSubmit={handleSubmit} className="max-w-3xl mx-auto px-4 py-8 pb-16 space-y-6">
         {/* Fechas */}
         <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
           <h2 className="text-xs font-bold text-gray-900 uppercase tracking-wide mb-4">Fechas</h2>
